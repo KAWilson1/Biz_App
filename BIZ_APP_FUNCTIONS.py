@@ -93,8 +93,6 @@ def show_analytics(queue, itemList):
 
 #GUI buttons
 def clear_order(textbox, totalLabel, currOrder):
-    print(type(textbox))
-    print(type(totalLabel))
     currOrder.cart = []
     currOrder.orderID += 1
     currOrder.myDate = datetime.datetime.now().date()
