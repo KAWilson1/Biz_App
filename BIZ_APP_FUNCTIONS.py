@@ -26,31 +26,6 @@ def read_items(sheet):
         toReturn.append(tempItem)
     return toReturn
 
-def read_orders(sheet):
-    #list of orders from xlsx sheet
-    toReturn = []
-
-    for row in range(1, sheet.nrows):
-        currID = int(sheet.cell_value(row, 0))
-        currItems = sheet.cell_value(row, 1).split(",")
-        #convert excel date to date
-        currDate = xlrd.xldate_as_tuple(sheet.cell_value(row, 2),0)
-        currDate = date(currDate[0], currDate[1], currDate[2])
-        
-        tempOrder = Order(currID, currItems, currDate)
-        toReturn.append(tempOrder)
-    return toReturn
-
-#Author: AW
-def write_report(sheet,toPrintList):
-    sheet.write("A1", "Description")
-    sheet.write("B1", "Data")
-    for i in range(0, len(toPrintList)):
-        sheet.write(i+1, 0, toPrintList[i][0])
-        sheet.write(i+1, 1, str(toPrintList[i][1]))
-    return sheet
-
-
 def get_total(itemList, currOrder):
     total = 0
     for currItem in currOrder.cart:
@@ -61,7 +36,7 @@ def get_total(itemList, currOrder):
                     total += float(currItem.get_cost()) * 0.07
     return round(total, 2)
 
-def excelifyDate(currDate):
+def excelify_date(currDate):
     if type(currDate) != datetime.date:
         raise Exception("Requires a datetime.date argument, received: " + str(type(currDate)))
 
@@ -118,6 +93,8 @@ def show_analytics(queue, itemList):
 
 #GUI buttons
 def clear_order(textbox, totalLabel, currOrder):
+    print(type(textbox))
+    print(type(totalLabel))
     currOrder.cart = []
     currOrder.orderID += 1
     currOrder.myDate = datetime.datetime.now().date()
@@ -154,7 +131,7 @@ def export_queue(queue):
             
         outputWs.write(i+1, 0, str(queue[i].get_ID()))     
         outputWs.write(i+1, 1, idString[:-1])
-        outputWs.write(i+1, 2, excelifyDate(queue[i].get_date()), f_date)
+        outputWs.write(i+1, 2, excelify_date(queue[i].get_date()), f_date)
 
     try:
         outputWb.close()
@@ -176,13 +153,12 @@ def simulate_order(textbox, totalLabel, itemList, currOrder):
 
     totalLabel['text'] = "Total: $" + str(get_total(itemList, currOrder))
 
-
 FONT = ("Verdana", 12)
 
 #start of GUI section
 class MainWindow(tk.Tk):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args):
         tk.Tk.__init__(self)
         window = tk.Frame(self)
         tk.Tk.wm_title(self, "Biz App")
@@ -212,45 +188,23 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Start Page", font=FONT)
         label.pack(pady=10, padx=10)
 
-        button2 = ttk.Button(self, text="Clear Order", command=lambda: clear_order(textBox, totalLabel, currentOrder))
+        button1 = ttk.Button(self, text="Clear Order", command=lambda: clear_order(textBox, totalLabel, currentOrder))
+        button1.pack(side="left")
+
+        button2 = ttk.Button(self, text="Pay", command=lambda: pay(textBox, totalLabel, currentOrder, queue))
         button2.pack(side="left")
 
-        button6 = ttk.Button(self, text="Pay", command=lambda: pay(textBox, totalLabel, currentOrder, queue))
-        button6.pack(side="left")
+        button3 = ttk.Button(self, text="Export Orders", command=lambda: export_queue(queue))
+        button3.pack(side="left")
 
-        button8 = ttk.Button(self, text="Export Orders", command=lambda: export_queue(queue))
-        button8.pack(side="left")
-
-        button7 = ttk.Button(self, text="Print Report", command=lambda: show_analytics(queue, itemList))
-        button7.pack(side="left")
-
-        button4 = ttk.Button(self, text="Simulate Order", command=lambda: simulate_order(textBox, totalLabel, itemList, currentOrder))
+        button4 = ttk.Button(self, text="Print Report", command=lambda: show_analytics(queue, itemList))
         button4.pack(side="left")
+
+        button5 = ttk.Button(self, text="Simulate Order", command=lambda: simulate_order(textBox, totalLabel, itemList, currentOrder))
+        button5.pack(side="left")
 
         textBox = tk.Text()
         textBox.pack()
 
         totalLabel = tk.Label(self, text="Total: $0.00", font=FONT)
         totalLabel.pack()
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
