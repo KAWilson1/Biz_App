@@ -1,0 +1,34 @@
+Classes:
+	Order()
+	Item()
+	
+Order(): orderID<int>, cart<list<Item>>, myDate<datetime.date> -> 
+	Purpose:
+		Data structure for a single order
+	Input:
+		orderID is a unique id
+		cart is a list of items that are in this order
+		myDate is the date only
+	Functions:
+		Getters:
+			get_ID(): 
+			get_cart(): 
+			get_date(): 
+		add_item(item<Item>): adds an item to cart
+	Notes:
+	
+Item(): itemID<int>, name<str>, cost<double>, taxable<str> -> 
+	Purpose:
+		Data structure for a single item
+	Input:
+		itemID is a unique id
+		name is a string of the item's name
+		cost is a double of the cost
+		taxable is a string with the value 'Y' or 'N'
+	Functions:
+		Getters:
+			get_ID():
+			get_name():
+			get_cost():
+			get_taxable():
+	Notes:

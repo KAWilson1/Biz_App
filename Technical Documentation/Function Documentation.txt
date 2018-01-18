@@ -1,0 +1,107 @@
+Classes:
+	MainWindow()
+	StartPage()
+
+Functions:
+	read_items()
+	get_total()
+	excelify_date()
+	show_analytics()
+	clear_order()
+	pay()
+	export_queue()
+	simulate_order()
+
+MainWindow(): *args ->
+	Purpose:
+		Main window for the GUI
+	Input:
+		*args are passed to StartPage()
+	Functions:
+	Notes:
+	
+StartPage(): parent<tkinter.Frame>, controller<MainWindow>, itemList<list<Item>>, currentOrder<Order>, queue<list<Order>> ->
+	Purpose:
+		Container for holding elements of the GUI
+	Input:
+		parent is tk.Frame(MainWindowObject)
+		controller is MainWindowObject
+	Functions:
+	Notes:
+
+read_items(): sheet<xlrd.Sheet> -> <list<Item>>
+	Purpose: 
+		Populate a list of all items in given worksheet
+	Input:
+	Output:
+	Notes:
+
+get_total(): itemList<list<Item>>, currOrder<Order> -> <float>
+	Purpose:
+		Get the total cost of the current order
+	Input:
+		itemList is all items (from read_items())
+		currOrder is the current order
+	Output:
+	Notes:
+		output includes tax (7%)
+		
+excelify_date(): currDate<datetime.date> -> <float>
+	Purpose:
+		Take a datetime.date object and convert it to excel's float date format
+	Input:
+	Output:
+		Float value of days since 1/1/1900 + 2 (2 accounts for leap seconds)
+	Notes:	
+	
+show_analytics(): queue<list<Order>>, itemList<list<Item>> -> 
+	Purpose:
+		Display a messagebox of the total revenue of current session, and the least and most bought items
+	Input:
+		queue is a list of all the orders from the current session
+		itemList is all items (from read_items())
+	Output:
+		tkitner.showinfo()
+	Notes:
+	
+clear_order(): textbox<tkinter.Text>, totalLabel<tkinter.Label>, currOrder<Order> -> 
+	Purpose:
+		Clear the current order and don't save it
+	Input:
+		textbox displays the items in the current order
+		totalLabel displays the cost of the current order
+		currOrder is the current order
+	Output:
+	Notes:
+	
+pay(): textbox<tkinter.Text>, label<tkinter.Label>, currOrder<Order>, queue<list<Order>> ->
+	Purpose:
+		Add the current order to the order queue and clear the current order
+	Input:
+		textbox displays the items in the current order
+		label displays the cost of the current order
+		currOrder is the current order
+		queue is a list of all the orders from the current session
+	Output:
+	Notes:
+	
+export_queue(): queue<list<Order>> ->
+	Purpose:
+		Output the orders in the current queue to an excel file
+	Input:
+		queue is a list of all the orders from the current session
+	Output:
+	Notes:
+		Excel file is named Sales_Report_*MONTH*_*DAY*.xlsx
+		If multiple queues are output in the same day, the file will write over itself
+		
+simulate_order(): textbox<tkinter.Text>, totalLabel<tkinter.Label>, itemList<list<Item>>, currOrder<Order> ->
+	Purpose:
+		Generate 1-4 items and add them to the current order
+	Input:
+		textbox displays the items in the current order
+		totalLabel displays the cost of the current order
+		itemList is a list of all items 
+		currOrder is the current order
+	Output:
+	Notes:
